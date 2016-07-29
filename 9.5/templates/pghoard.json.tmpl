@@ -25,6 +25,13 @@
             "aws_secret_access_key":"{{getenv "AWS_SECRET_ACCESS_KEY"}}",
             "bucket_name":"{{getenv "AWS_BUCKETNAME"}}",
             "region": "{{getenv "AWS_DEFAULT_REGION"}}"
+         {{else if eq $storage_type "swift"}}
+            "storage_type": "swift",
+            "user":"{{getenv "OS_USERNAME"}}",
+            "key":"{{getenv "OS_PASSWORD"}}",
+            "auth_url":"{{getenv "OS_AUTH_URL"}}",
+            "container_name":"{{getenv "OS_CONTAINER_NAME"}}",
+            "tenant_name":"{{getenv "OS_TENANT_NAME"}}"
          {{end}}
          },
          "pg_data_directory": "/home/postgres/restore",

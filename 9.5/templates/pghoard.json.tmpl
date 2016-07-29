@@ -31,6 +31,9 @@
             "key":"{{getenv "OS_PASSWORD"}}",
             "auth_url":"{{getenv "OS_AUTH_URL"}}",
             "container_name":"{{getenv "OS_CONTAINER_NAME"}}",
+            {{if getenv "OS_REGION_NAME"}}
+            "region_name":"{{getenv "OS_REGION_NAME"}}",
+            {{end}}
             "tenant_name":"{{getenv "OS_TENANT_NAME"}}"
          {{end}}
          },

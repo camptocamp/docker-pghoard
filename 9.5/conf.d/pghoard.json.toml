@@ -1,0 +1,3 @@
+[template]
+src = "pghoard.json.tmpl"
+dest = "/home/postgres/pghoard.json"

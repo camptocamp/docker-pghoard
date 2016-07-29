@@ -1,0 +1,34 @@
+{
+   "backup_location": "/home/postgres/pghoard",
+   "backup_sites":{
+      "{{getenv "HOSTNAME"}}":{
+         "active_backup_mode": "pg_receivexlog",
+         "basebackup_count": 2,
+         "basebackup_interval_hours": 24,
+         "nodes":[
+            {
+               "host":"{{getenv "PG_HOST"}}",
+               "port":"{{getenv "PG_PORT"}}",
+               "password":"{{getenv "PG_PASSWORD"}}",
+               "user":"{{getenv "PG_USER"}}",
+               "slot": "{{getenv "HOSTNAME"}}"
+            }
+         ],
+         "object_storage":{
+            "storage_type": "s3",
+            "aws_access_key_id":"{{getenv "AWS_ACCESS_KEY_ID"}}",
+            "aws_secret_access_key":"{{getenv "AWS_SECRET_ACCESS_KEY"}}",
+            "bucket_name":"{{getenv "AWS_BUCKETNAME"}}",
+            "region": "{{getenv "AWS_DEFAULT_REGION"}}"
+         },
+         "pg_data_directory": "/home/postgres/restore",
+         "pg_xlog_directory": "/home/postgres/restore/pg_xlog"
+      }
+   },
+   "http_address": "127.0.0.1",
+   "http_port": 16000,
+   "log_level": "INFO",
+   "syslog": false,
+   "syslog_address": "/dev/log",
+   "syslog_facility": "local2"
+}

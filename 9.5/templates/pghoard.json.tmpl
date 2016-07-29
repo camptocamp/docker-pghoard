@@ -15,11 +15,17 @@
             }
          ],
          "object_storage":{
+         {{$storage_type := getenv "STORAGE_TYPE"}}
+         {{if eq $storage_type "local"}}
+            "storage_type": "local",
+            "directory": "{{getenv "DIRECTORY"}}"
+         {{else if eq $storage_type "s3"}}
             "storage_type": "s3",
             "aws_access_key_id":"{{getenv "AWS_ACCESS_KEY_ID"}}",
             "aws_secret_access_key":"{{getenv "AWS_SECRET_ACCESS_KEY"}}",
             "bucket_name":"{{getenv "AWS_BUCKETNAME"}}",
             "region": "{{getenv "AWS_DEFAULT_REGION"}}"
+         {{end}}
          },
          "pg_data_directory": "/home/postgres/restore",
          "pg_xlog_directory": "/home/postgres/restore/pg_xlog"

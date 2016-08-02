@@ -11,7 +11,7 @@ done
 psql -h $PG_HOST -c "WITH foo AS (SELECT COUNT(*) AS count FROM pg_replication_slots WHERE slot_name='pghoard') SELECT pg_create_physical_replication_slot('pghoard') FROM foo WHERE count=0;" -U replicator -d postgres
 
 echo "Create pghoard configuration with confd ..."
-if $(getent hosts rancher-metadata); then
+if getent hosts rancher-metadata; then
   confd -onetime -backend rancher -prefix /2015-12-19
 else
   confd -onetime -backend env

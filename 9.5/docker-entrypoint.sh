@@ -11,7 +11,11 @@ done
 psql -h $PG_HOST -c "SELECT * FROM pg_create_physical_replication_slot('pghoard');" -U replicator -d postgres
 
 echo "Create pghoard configuration with confd ..."
-confd -onetime -backend env
+if $(getenv rancher-metadata); then
+  confd -onetime -backend rancher -prefix /2015-12-19
+else
+  confd -onetime -backend env
+fi
 
 echo "Run the pghoard daemon ..."
 exec pghoard --short-log --config /home/postgres/pghoard.json

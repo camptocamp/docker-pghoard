@@ -1,7 +1,11 @@
 {
    "backup_location": "/home/postgres/pghoard",
    "backup_sites":{
+   {{if exists "/self/stack/environment_name"}}
+      "{{get "/self/stack/environment_name"}}_{{get "/self/stack/name}}"}}":{
+   {{else}}
       "{{getenv "HOSTNAME"}}":{
+   {{end}}
          "active_backup_mode": "pg_receivexlog",
          "basebackup_count": 2,
          "basebackup_interval_hours": 24,

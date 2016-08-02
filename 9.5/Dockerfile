@@ -1,12 +1,14 @@
 FROM postgres:9.5
 MAINTAINER Camptocamp <docker@camptocamp.com>
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive \
+  PGHOARD_VERSION=bfc86e3f699ef998a8a22404632613b49fdae22e
 
 RUN apt-get update \
   && apt-get -y --no-install-suggests --no-install-recommends install \
      gcc \
      g++ \
+     git \
      make \
      libffi-dev \
      curl \
@@ -16,7 +18,7 @@ RUN apt-get update \
      python3-dev \
      python3-pip \
      libpq-dev \
-  && pip3 install pghoard awscli boto python-keystoneclient python-swiftclient \
+  && pip3 install git+https://github.com/ohmu/pghoard.git@${PGHOARD_VERSION} awscli boto python-keystoneclient python-swiftclient \
   && apt-get -y remove gcc python2.7 \
   && apt-get -y autoremove \
   && apt-get clean \

@@ -2,7 +2,7 @@
    "backup_location": "/home/postgres/pghoard",
    "backup_sites":{
    {{if exists "/self/stack/environment_name"}}
-      "{{get "/self/stack/environment_name"}}_{{get "/self/stack/name}}"}}":{
+      "{{getv "/self/stack/environment_name"}}_{{getv "/self/stack/name"}}":{
    {{else}}
       "{{getenv "HOSTNAME"}}":{
    {{end}}

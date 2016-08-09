@@ -2,7 +2,7 @@ FROM postgres:9.5
 MAINTAINER Camptocamp <docker@camptocamp.com>
 
 ENV DEBIAN_FRONTEND=noninteractive \
-  PGHOARD_VERSION=bfc86e3f699ef998a8a22404632613b49fdae22e
+  PGHOARD_VERSION=f38b187df85abe44ed6c213b20f060beddcfc441
 
 RUN apt-get update \
   && apt-get -y --no-install-suggests --no-install-recommends install \

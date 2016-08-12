@@ -2,7 +2,8 @@ FROM postgres:9.5
 MAINTAINER Camptocamp <docker@camptocamp.com>
 
 ENV DEBIAN_FRONTEND=noninteractive \
-  PGHOARD_VERSION=f38b187df85abe44ed6c213b20f060beddcfc441
+  PGHOARD_VERSION=f38b187df85abe44ed6c213b20f060beddcfc441 \
+  CONFD_VERSION=0.12.0-alpha3
 
 RUN apt-get update \
   && apt-get -y --no-install-suggests --no-install-recommends install \
@@ -24,7 +25,7 @@ RUN apt-get update \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
-RUN curl -L -o /usr/local/bin/confd https://github.com/kelseyhightower/confd/releases/download/v0.11.0/confd-0.11.0-linux-amd64 \
+RUN curl -L -o /usr/local/bin/confd https://github.com/kelseyhightower/confd/releases/download/v${CONFD_VERSION}/confd-${CONFD_VERSION}-linux-amd64 \
   && chmod +x /usr/local/bin/confd
 
 COPY conf.d /etc/confd/conf.d

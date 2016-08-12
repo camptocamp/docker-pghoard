@@ -48,7 +48,11 @@
    },
    "http_address": "127.0.0.1",
    "http_port": 16000,
-   "log_level": "{{getenv "LOG_LEVEL" "INFO"}}",
+ {{if getenv "LOG_LEVEL"}}
+   "log_level": "{{getenv "LOG_LEVEL"}}",
+ {{else}}
+   "log_level": "INFO",
+ {{end}}
    "syslog": false,
    "syslog_address": "/dev/log",
    "syslog_facility": "local2"

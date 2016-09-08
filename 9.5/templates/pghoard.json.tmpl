@@ -6,7 +6,7 @@
    {{else}}
       "{{getenv "HOSTNAME"}}":{
    {{end}}
-         "active_backup_mode": "pg_receivexlog",
+         "active_backup_mode": "{{getenv "PGHOARD_ACTIVE_BACKUP_MODE"}}",
          "basebackup_count": 2,
          "basebackup_interval_hours": 24,
          "nodes":[

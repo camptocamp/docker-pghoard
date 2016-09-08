@@ -22,7 +22,7 @@
          {{$storage_type := getenv "PGHOARD_STORAGE_TYPE"}}
          {{if eq $storage_type "local"}}
             "storage_type": "local",
-            "directory": "{{getenv "DIRECTORY"}}"
+            "directory": "{{getenv "PGHOARD_DIRECTORY"}}"
          {{else if eq $storage_type "s3"}}
             "storage_type": "s3",
             "aws_access_key_id":"{{getenv "AWS_ACCESS_KEY_ID"}}",

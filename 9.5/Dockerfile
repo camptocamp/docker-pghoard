@@ -4,7 +4,8 @@ MAINTAINER Camptocamp <docker@camptocamp.com>
 ENV DEBIAN_FRONTEND=noninteractive \
   PGHOARD_VERSION=f38b187df85abe44ed6c213b20f060beddcfc441 \
   CONFD_VERSION=0.12.0-alpha3 \
-  PGHOARD_BASEBACKUP_COUNT=1
+  PGHOARD_BASEBACKUP_COUNT=1 \
+  PGHOARD_BASEBACKUP_INTERVAL_HOURS=24
 
 RUN apt-get update \
   && apt-get -y --no-install-suggests --no-install-recommends install \

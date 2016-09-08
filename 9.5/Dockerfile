@@ -22,7 +22,10 @@ RUN apt-get update \
      python3-dev \
      python3-pip \
      libpq-dev \
-  && pip3 install git+https://github.com/ohmu/pghoard.git@${PGHOARD_VERSION} awscli boto python-keystoneclient python-swiftclient \
+  && pip3 install \
+     git+https://github.com/psycopg/psycopg2.git@2a4d602 \
+     git+https://github.com/ohmu/pghoard.git@${PGHOARD_VERSION} \
+     awscli boto python-keystoneclient python-swiftclient \
   && apt-get -y remove gcc python2.7 \
   && apt-get -y autoremove \
   && apt-get clean \

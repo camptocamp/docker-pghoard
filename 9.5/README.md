@@ -54,7 +54,7 @@ Determines log level of pghoard. (default `INFO`)
 
 ## AWS_DEFAULT_REGION
 
-## OS_USERNAME
+## OS_USERNAME
 
 ## OS_PASSWORD
 

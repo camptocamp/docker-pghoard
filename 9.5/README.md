@@ -28,7 +28,7 @@ How often to take a new basebackup of a cluster. The shorter the interval, the f
 
 ## PG_HOST
 
-## PG_PORT
+## PG_PORT
 
 ## PG_PASSWORD
 

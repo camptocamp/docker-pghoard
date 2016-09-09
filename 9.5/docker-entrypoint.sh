@@ -17,5 +17,8 @@ else
   confd -onetime -backend env
 fi
 
+echo "Dump configuration..."
+cat /home/postgres/pghoard.json
+
 echo "Run the pghoard daemon ..."
 exec pghoard --short-log --config /home/postgres/pghoard.json

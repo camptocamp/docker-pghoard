@@ -46,6 +46,16 @@ Directory for the path to the backup target (local) storage directory.
 
 Determines log level of pghoard. (default `INFO`)
 
+## PGHOARD_STATSD_ADDRESS
+
+Enables metrics sending to a statsd daemon that supports Telegraf or DataDog syntax with tags.
+
+## PGHOARD_STATSD_PORT
+
+## PGHOARD_STATSD_FORMAT
+
+Can be either `telegraf` or `datadog`. (default `telegraf`)
+
 ## AWS_ACCESS_KEY_ID
 
 ## AWS_SECRET_ACCESS_KEY

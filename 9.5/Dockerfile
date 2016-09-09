@@ -6,7 +6,9 @@ ENV DEBIAN_FRONTEND=noninteractive \
   PGHOARD_VERSION=f38b187 \
   PGHOARD_BASEBACKUP_COUNT=1 \
   PGHOARD_BASEBACKUP_INTERVAL_HOURS=24 \
-  PGHOARD_LOG_LEVEL=INFO
+  PGHOARD_LOG_LEVEL=INFO \
+  PGHOARD_STATSD_PORT=8125 \
+  PGHOARD_STATSD_FORMAT=telegraf
 
 RUN apt-get update \
   && apt-get -y --no-install-suggests --no-install-recommends install \

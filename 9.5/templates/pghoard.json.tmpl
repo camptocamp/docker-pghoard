@@ -27,8 +27,17 @@
             "storage_type": "s3",
             "aws_access_key_id":"{{getenv "AWS_ACCESS_KEY_ID"}}",
             "aws_secret_access_key":"{{getenv "AWS_SECRET_ACCESS_KEY"}}",
-            "bucket_name":"{{getenv "AWS_BUCKETNAME"}}",
-            "region": "{{getenv "AWS_DEFAULT_REGION"}}"
+            "region": "{{getenv "AWS_DEFAULT_REGION"}}",
+            {{if getenv "AWS_HOST"}}
+            "host": "{{getenv "AWS_HOST"}}",
+            {{end}}
+            {{if getenv "AWS_PORT"}}
+            "port": {{getenv "AWS_PORT"}},
+            {{end}}
+            {{if getenv "AWS_IS_SECURE"}}
+            "is_secure": "{{getenv "AWS_IS_SECURE"}}",
+            {{end}}
+            "bucket_name":"{{getenv "AWS_BUCKETNAME"}}"
          {{else if eq $storage_type "swift"}}
             "storage_type": "swift",
             "user":"{{getenv "OS_USERNAME"}}",

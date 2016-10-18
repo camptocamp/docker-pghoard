@@ -2,6 +2,10 @@
 
 set -e
 
+echo "Fix permissions"
+mkdir -p /home/postgres/restore
+chown -R postgres /home/postgres
+
 echo "Create physical_replication_slot on master ..."
 export PGPASSWORD=$PG_PASSWORD
 until psql -qAt -U replicator -h $PG_HOST -d postgres -c "select user;"; do 
@@ -21,4 +25,4 @@ echo "Dump configuration..."
 cat /home/postgres/pghoard.json
 
 echo "Run the pghoard daemon ..."
-exec pghoard --short-log --config /home/postgres/pghoard.json
+exec gosu postgres pghoard --short-log --config /home/postgres/pghoard.json

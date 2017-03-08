@@ -28,7 +28,6 @@ RUN apt-get update \
      libpq-dev \
   && curl -sSL https://bootstrap.pypa.io/get-pip.py | python3 \
   && pip3 install \
-     git+https://github.com/psycopg/psycopg2.git@2a4d602 \
      git+https://github.com/ohmu/pghoard.git@${PGHOARD_VERSION} \
      awscli boto python-keystoneclient python-swiftclient \
   && apt-get -y remove gcc python2.7 \

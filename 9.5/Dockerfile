@@ -17,6 +17,7 @@ RUN apt-get update \
      git \
      make \
      libffi-dev \
+     libssl-dev \
      curl \
      ca-certificates \
      rsync \

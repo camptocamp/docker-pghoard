@@ -18,12 +18,15 @@ RUN apt-get update \
      make \
      libffi-dev \
      curl \
+     ca-certificates \
      rsync \
      libsnappy-dev \
+     libssl-dev \
+     python3 \
      python3-setuptools \
      python3-dev \
-     python3-pip \
      libpq-dev \
+  && curl -sSL https://bootstrap.pypa.io/get-pip.py | python3 \
   && pip3 install \
      git+https://github.com/psycopg/psycopg2.git@2a4d602 \
      git+https://github.com/ohmu/pghoard.git@${PGHOARD_VERSION} \

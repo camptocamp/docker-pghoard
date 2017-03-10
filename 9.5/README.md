@@ -13,7 +13,7 @@ $ docker run -d camptocamp/pghoard
 ###Launch in restore mode
 
 ```shell
-$ docker run -d -e PGHOARD_RESTORE=SITE=foo camptocamp/pghoard [--recovery-target-time <time>] [--recovery-target-xid <xid>]
+$ docker run -d -e PGHOARD_RESTORE_SITE=foo camptocamp/pghoard [--recovery-target-time <time>] [--recovery-target-xid <xid>]
 ```
 
 Environment variables:

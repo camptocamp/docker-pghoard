@@ -37,7 +37,7 @@ else
   touch /tmp/pghoard_maintenance_mode_file
 
   echo "Get the latest available basebackup ..."
-  gosu postgres pghoard_restore get-basebackup --config pghoard_restore.json --site $PGHOARD_RESTORE_SITE --target-dir restore --restore-to-master --recovery-target-action promote --recovery-end-command "pkill pghoard" --overwrite $*
+  gosu postgres pghoard_restore get-basebackup --config pghoard_restore.json --site $PGHOARD_RESTORE_SITE --target-dir restore --restore-to-master --recovery-target-action promote --recovery-end-command "pkill pghoard" --overwrite "$@"
 
   # remove custom server configuration (espacially the hot standby parameter)
   gosu postgres mv restore/postgresql.auto.conf restore/postgresql.auto.conf.backup

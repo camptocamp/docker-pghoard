@@ -9,6 +9,7 @@
          "active_backup_mode": "{{getenv "PGHOARD_ACTIVE_BACKUP_MODE"}}",
          "basebackup_count": {{getenv "PGHOARD_BASEBACKUP_COUNT"}},
          "basebackup_interval_hours": {{getenv "PGHOARD_BASEBACKUP_INTERVAL_HOURS"}},
+         "basebackup_mode": "pipe",
          "nodes":[
             {
                "host":"{{getenv "PG_HOST"}}",

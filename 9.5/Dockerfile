@@ -3,7 +3,7 @@ MAINTAINER Camptocamp <docker@camptocamp.com>
 
 ENV DEBIAN_FRONTEND=noninteractive \
   CONFD_VERSION=0.12.0-alpha3 \
-  PGHOARD_VERSION=f38b187 \
+  PGHOARD_VERSION=1.5.0 \
   PGHOARD_BASEBACKUP_COUNT=1 \
   PGHOARD_BASEBACKUP_INTERVAL_HOURS=24 \
   PGHOARD_LOG_LEVEL=INFO \
@@ -59,6 +59,6 @@ COPY templates /etc/confd/templates
 COPY /docker-entrypoint.sh /
 WORKDIR /home/postgres
 
-VOLUME [ "/home/postgres/pghoard" ]
+VOLUME [ "/home/postgres/pghoard", "/var/lib/pghoard" ]
 
 ENTRYPOINT ["/docker-entrypoint.sh"]

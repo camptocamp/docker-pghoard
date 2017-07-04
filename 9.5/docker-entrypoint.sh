@@ -4,6 +4,7 @@ set -e
 
 echo "Create pghoard directories..."
 chown -R postgres /home/postgres
+chown -R postgres /var/lib/pghoard
 
 echo "Create pghoard configuration with confd ..."
 if getent hosts rancher-metadata; then

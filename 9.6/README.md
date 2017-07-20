@@ -35,7 +35,7 @@ Environment variables:
 
 ### PGHOARD_ACTIVE_BACKUP_MODE
 
-Can be either `pg_receivexlog` or `archive_command`. If set to `pg_receivexlog`, pghoard will start up a pg_receivexlog process to be run against the database server. You can also set this to the experimental `walreceiver` mode whereby pghoard will start communicating directly with PostgreSQL through the replication protocol.
+Can be either `pg_receivexlog` or `archive_command`. If set to `pg_receivexlog`, pghoard will start up a pg_receivexlog process to be run against the database server. If set to `archive_command`, then who knows what will happen. You can also set this to the experimental `walreceiver` mode whereby pghoard will start communicating directly with PostgreSQL through the replication protocol.
 
 ### PGHOARD_BASEBACKUP_COUNT
 

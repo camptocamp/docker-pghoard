@@ -1,19 +1,33 @@
 PGHoard Docker image
 ====================
 
-Usage
------
-
-###Launch in backup mode
+Usage:
+------
 
 ```shell
-$ docker run -d camptocamp/pghoard
+$ docker run camptocamp/pghoard
 ```
 
-###Launch in restore mode
+or
 
 ```shell
-$ docker run -d -e PGHOARD_RESTORE_SITE=foo camptocamp/pghoard [--recovery-target-time <time>] [--recovery-target-xid <xid>]
+$ docker run --entrypoint <command> camptocamp/pghoard
+```
+
+where <command> is one of `pghoard`, `pghoard_archive_sync`, `pghoard_create_keys`, `pghoard_postgres_command` or `pghoard_restore`.
+
+Launch in backup mode:
+----------------------
+
+```shell
+$ docker run -d --entrypoint /backup.sh camptocamp/pghoard
+```
+
+Launch in restore mode:
+-----------------------
+
+```shell
+$ docker run -d -e PGHOARD_RESTORE=SITE=foo --entrypoint /restore.sh camptocamp/pghoard [--recovery-target-time <time>] [--recovery-target-xid <xid>]
 ```
 
 Environment variables:

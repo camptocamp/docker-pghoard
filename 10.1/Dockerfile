@@ -2,6 +2,7 @@ FROM postgres:10.1
 MAINTAINER Camptocamp <docker@camptocamp.com>
 
 ENV DEBIAN_FRONTEND=noninteractive \
+  HOME=/home/postgres \
   CONFD_VERSION=0.14.0 \
   PGHOARD_VERSION=c917e65 \
   PGHOARD_BASEBACKUP_COUNT=1 \
@@ -53,6 +54,12 @@ RUN set -x \
     && chmod +x /usr/local/bin/gosu \
     && gosu nobody true \
     && rm -rf /var/lib/apt/lists/*
+
+# pghoard 1.6.0 check for the existence of PG_VERSION in pg_data_directory...
+RUN mkdir -p /home/postgres/restore && \
+  echo $PG_MAJOR > /home/postgres/restore/PG_VERSION && \
+  chgrp -R 0 /home/postgres && \
+  chmod -R g=u /home/postgres
 
 COPY conf.d /etc/confd/conf.d
 COPY templates /etc/confd/templates

@@ -2,10 +2,6 @@
 
 set -e
 
-# pghoard 1.6.0 check for the existence of this file...
-mkdir -p /home/postgres/restore
-echo $PG_MAJOR > /home/postgres/restore/PG_VERSION
-
 echo "Create pghoard directories..."
 chown -R postgres /home/postgres
 chown -R postgres /var/lib/pghoard

@@ -4,7 +4,7 @@ MAINTAINER Camptocamp <docker@camptocamp.com>
 ENV DEBIAN_FRONTEND=noninteractive \
   HOME=/home/postgres \
   CONFD_VERSION=0.14.0 \
-  PGHOARD_VERSION=1.7.0 \
+  PGHOARD_VERSION=8a012a0 \
   PGHOARD_BASEBACKUP_COUNT=1 \
   PGHOARD_BASEBACKUP_INTERVAL_HOURS=24 \
   PGHOARD_LOG_LEVEL=INFO \
@@ -29,7 +29,7 @@ RUN apt-get update \
      libpq-dev \
   && curl -sSL https://bootstrap.pypa.io/get-pip.py | python3 \
   && pip3 install \
-     git+https://github.com/ohmu/pghoard.git@${PGHOARD_VERSION} \
+     git+https://github.com/camptocamp/pghoard.git@${PGHOARD_VERSION} \
      idna awscli boto python-keystoneclient python-swiftclient \
   && apt-get -y remove gcc python2.7 \
   && apt-get -y autoremove \

@@ -1,0 +1,50 @@
+{
+   "backup_location": "/home/postgres/pghoard",
+   "backup_sites":{
+      "{{getenv "PGHOARD_RESTORE_SITE"}}":{
+         "basebackup_count": 1024,
+         "nodes":[{}],
+         "object_storage":{
+         {{$storage_type := getenv "PGHOARD_STORAGE_TYPE"}}
+         {{if eq $storage_type "local"}}
+            "storage_type": "local",
+            "directory": "{{getenv "PGHOARD_DIRECTORY"}}"
+         {{else if eq $storage_type "s3"}}
+            "storage_type": "s3",
+            "aws_access_key_id":"{{getenv "AWS_ACCESS_KEY_ID"}}",
+            "aws_secret_access_key":"{{getenv "AWS_SECRET_ACCESS_KEY"}}",
+            "region": "{{getenv "AWS_DEFAULT_REGION"}}",
+            {{if getenv "AWS_HOST"}}
+            "host": "{{getenv "AWS_HOST"}}",
+            {{end}}
+            {{if getenv "AWS_PORT"}}
+            "port": {{getenv "AWS_PORT"}},
+            {{end}}
+            {{if getenv "AWS_IS_SECURE"}}
+            "is_secure": "{{getenv "AWS_IS_SECURE"}}",
+            {{end}}
+            "bucket_name":"{{getenv "AWS_BUCKETNAME"}}"
+         {{else if eq $storage_type "swift"}}
+            "storage_type": "swift",
+            "user":"{{getenv "OS_USERNAME"}}",
+            "key":"{{getenv "OS_PASSWORD"}}",
+            "auth_url":"{{getenv "OS_AUTH_URL"}}",
+            "segment_size":5368709120,
+            "container_name":"{{getenv "OS_CONTAINER_NAME"}}",
+            {{if getenv "OS_REGION_NAME"}}
+            "region_name":"{{getenv "OS_REGION_NAME"}}",
+            {{end}}
+            "tenant_name":"{{getenv "OS_TENANT_NAME"}}"
+         {{end}}
+         },
+         "pg_data_directory": "/home/postgres/restore",
+         "pg_xlog_directory": "/home/postgres/restore/pg_xlog"
+      }
+   },
+   "http_address": "127.0.0.1",
+   "http_port": 16000,
+   "log_level": "{{getenv "PGHOARD_LOG_LEVEL"}}",
+   "syslog": false,
+   "syslog_address": "/dev/log",
+   "syslog_facility": "local2"
+}

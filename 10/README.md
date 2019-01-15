@@ -23,13 +23,6 @@ Launch in backup mode:
 $ docker run -d --entrypoint /backup.sh camptocamp/pghoard
 ```
 
-Launch in restore mode:
------------------------
-
-```shell
-$ docker run -d -e PGHOARD_RESTORE=SITE=foo --entrypoint /restore.sh camptocamp/pghoard [--recovery-target-time <time>] [--recovery-target-xid <xid>]
-```
-
 Environment variables:
 ----------------------
 
@@ -94,7 +87,3 @@ Can be either `telegraf` or `datadog`. (default `telegraf`)
 ## OS_REGION_NAME
 
 ## OS_TENANT_NAME
-
-## PGHOARD_RESTORE_SITE
-
-Site to restore locally from storage.

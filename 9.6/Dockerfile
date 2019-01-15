@@ -64,7 +64,6 @@ COPY conf.d /etc/confd/conf.d
 COPY templates /etc/confd/templates
 
 COPY /docker-entrypoint.sh /
-COPY /restore.sh /
 WORKDIR /home/postgres
 
 VOLUME [ "/home/postgres/pghoard", "/var/lib/pghoard" ]

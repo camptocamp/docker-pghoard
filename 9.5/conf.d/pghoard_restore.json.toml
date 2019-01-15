@@ -1,3 +1,0 @@
-[template]
-src = "pghoard_restore.json.tmpl"
-dest = "/home/postgres/pghoard_restore.json"

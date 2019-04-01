@@ -49,6 +49,8 @@ RUN set -x \
     && export GNUPGHOME="$(mktemp -d)" \
     && gpg --keyserver keyserver.ubuntu.com --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
     && gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
+    && pkill -9 gpg-agent \
+    && pkill -9 dirmngr \
     && rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
     && chmod +x /usr/local/bin/gosu \
     && gosu nobody true \

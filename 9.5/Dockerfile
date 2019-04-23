@@ -9,7 +9,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
   PGHOARD_BASEBACKUP_INTERVAL_HOURS=24 \
   PGHOARD_LOG_LEVEL=INFO \
   PGHOARD_STATSD_PORT=8125 \
-  PGHOARD_STATSD_FORMAT=telegraf
+  PGHOARD_STATSD_FORMAT=telegraf \
+  PG_PORT=5432
 
 RUN apt-get update \
   && apt-get -y --no-install-suggests --no-install-recommends install \

@@ -10,7 +10,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
   PGHOARD_LOG_LEVEL=INFO \
   PGHOARD_STATSD_PORT=8125 \
   PGHOARD_STATSD_FORMAT=telegraf \
-  PG_PORT=5432
+  PG_PORT=5432 \
+  REPLICATION_SLOT_NAME=pghoard
 
 RUN apt-get update \
   && apt-get -y --no-install-suggests --no-install-recommends install \

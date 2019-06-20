@@ -16,9 +16,18 @@
                "port":"{{getenv "PG_PORT"}}",
                "password":"{{getenv "PG_PASSWORD"}}",
                "user":"{{getenv "PG_USER"}}",
-               "slot": "pghoard"
+               "slot": "{{getenv "REPLICATION_SLOT_NAME"}}"
             }
          ],
+         {{if getenv "ENCRYPTION_KEYS_PUBLIC"}}
+         "encryption_key_id": "key",
+         "encryption_keys": {
+           "key": {
+             "private": "{{getenv "ENCRYPTION_KEYS_PRIVATE"}}",
+             "public": "{{getenv "ENCRYPTION_KEYS_PUBLIC"}}"
+           }
+         },
+         {{end}}
          "object_storage":{
          {{$storage_type := getenv "PGHOARD_STORAGE_TYPE"}}
          {{if eq $storage_type "local"}}

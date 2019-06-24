@@ -12,11 +12,13 @@
          "basebackup_mode": "pipe",
          "nodes":[
             {
+               {{if getenv "PG_HOST"}}
                "host":"{{getenv "PG_HOST"}}",
                "port":"{{getenv "PG_PORT"}}",
                "password":"{{getenv "PG_PASSWORD"}}",
                "user":"{{getenv "PG_USER"}}",
                "slot": "{{getenv "REPLICATION_SLOT_NAME"}}"
+               {{end}}
             }
          ],
          {{if getenv "ENCRYPTION_KEYS_PUBLIC"}}

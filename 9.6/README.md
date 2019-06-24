@@ -92,20 +92,20 @@ Can be either `telegraf` or `datadog`. (default `telegraf`)
 
 Enable encryption of backups, you also need to setup `ENCRYPTION_KEYS_PRIVATE`.
 This must be a RSA key like:
-``
+```
 -----BEGIN PUBLIC KEY-----
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ...
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 -----END PUBLIC KEY-----
-``
+```
 
 ## ENCRYPTION_KEYS_PRIVATE
 
 Provide the private key for encryption. This must look like this :
 
-``
+```
 -----BEGIN PRIVATE KEY-----
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

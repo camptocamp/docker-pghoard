@@ -16,7 +16,7 @@
                "port":"{{getenv "PG_PORT"}}",
                "password":"{{getenv "PG_PASSWORD"}}",
                "user":"{{getenv "PG_USER"}}",
-               "slot": "pghoard"
+               "slot": "{{getenv "REPLICATION_SLOT_NAME"}}"
             }
          ],
          {{if getenv "ENCRYPTION_KEYS_PUBLIC"}}

@@ -2,15 +2,28 @@
 
 set -e
 
+# Check if current user is registered in nss DB
+if ! getent passwd "$(id -u)" &> /dev/null && [ -e /usr/lib/libnss_wrapper.so ]; then
+			export LD_PRELOAD='/usr/lib/libnss_wrapper.so'
+			export NSS_WRAPPER_PASSWD="$(mktemp)"
+			export NSS_WRAPPER_GROUP="$(mktemp)"
+			echo "postgres:x:$(id -u):$(id -g):PostgreSQL:/home/postgres:/bin/bash" > "$NSS_WRAPPER_PASSWD"
+			echo "postgres:x:$(id -g):" > "$NSS_WRAPPER_GROUP"
+fi
+
 echo "Create pghoard directories..."
 chown -R postgres /home/postgres
 chown -R postgres /var/lib/pghoard
 
-echo "Create pghoard configuration with confd ..."
-if getent hosts rancher-metadata; then
-  confd -onetime -backend rancher -prefix /2015-12-19
+if [ ! -f /home/postgres/pghoard.json ]; then
+	echo "Create pghoard configuration with confd ..."
+	if getent hosts rancher-metadata; then
+		confd -onetime -backend rancher -prefix /2015-12-19
+	else
+		confd -onetime -backend env
+	fi
 else
-  confd -onetime -backend env
+	echo "Configuration already present"
 fi
 
 echo "Dump configuration..."

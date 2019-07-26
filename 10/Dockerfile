@@ -34,6 +34,7 @@ RUN apt-get update \
   && pip3 install \
      git+https://github.com/aiven/pghoard.git@${PGHOARD_VERSION} \
      idna awscli boto python-keystoneclient python-swiftclient \
+  && rm -fr /home/postgres/.cache \
   && apt-get -y remove gcc python2.7 \
   && apt-get -y autoremove \
   && apt-get clean \

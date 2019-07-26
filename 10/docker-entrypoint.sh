@@ -28,24 +28,28 @@ else
   echo "Configuration already present"
 fi
 
-echo "Dump configuration..."
+echo "Dump configuration... (password removed)"
 cat /etc/pghoard/pghoard.json | grep -v 'password'
 
 # extract configuration to check replication slots
 for config in $(jq -Mrc '.backup_sites | reduce .[].nodes[0] as $node ([]; . + [$node])' /etc/pghoard/pghoard.json | jq -cr '.[]'); do
-  PG_HOST=$(echo $config | jq -r '.host')
-  PG_USER=$(echo $config | jq -r '.user')
-  PG_PORT=$(echo $config | jq -r '.port')
+  PGHOST=$(echo $config | jq -r '.host')
+  PGUSER=$(echo $config | jq -r '.user')
+  PGPORT=$(echo $config | jq -r '.port')
   PGPASSWORD=$(echo $config | jq -r '.password')
-  until psql -qAt -U $PG_USER -h $PG_HOST -p $PG_PORT -d postgres -c "select user;"; do
+  until psql -qAt -c "select user;" postgres; do
     echo "sleep 1s and try again ..."
     sleep 1
   done
-  psql -h $PG_HOST -p $PG_PORT -c "WITH foo AS (SELECT COUNT(*) AS count FROM pg_replication_slots WHERE slot_name='${REPLICATION_SLOT_NAME}') SELECT pg_create_physical_replication_slot('${REPLICATION_SLOT_NAME}') FROM foo WHERE count=0;" -U $PG_USER -d postgres
+  psql -c "WITH foo AS (SELECT COUNT(*) AS count FROM pg_replication_slots WHERE slot_name='${REPLICATION_SLOT_NAME}') SELECT pg_create_physical_replication_slot('${REPLICATION_SLOT_NAME}') FROM foo WHERE count=0;" postgres
+  unset PGHOST
+  unset PGUSER
+  unset PGPORT
+  unset PGPASSWORD
 done
 
-echo "Run the pghoard daemon ..."
-if [ $RANDOM_USER == "true"]; then
+echo "Run the pghoard daemon ... random user: $RANDOM_USER"
+if [ $RANDOM_USER = "true" ]; then
   exec pghoard --short-log --config /etc/pghoard/pghoard.json
 else
   exec gosu postgres pghoard --short-log --config /etc/pghoard/pghoard.json

@@ -30,6 +30,7 @@ RUN apt-get update \
      python3-setuptools \
      python3-dev \
      libpq-dev \
+     jq \
   && curl -sSL https://bootstrap.pypa.io/get-pip.py | python3 \
   && pip3 install \
      git+https://github.com/aiven/pghoard.git@${PGHOARD_VERSION} \

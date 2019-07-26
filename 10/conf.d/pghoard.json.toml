@@ -1,6 +1,6 @@
 [template]
 src = "pghoard.json.tmpl"
-dest = "/home/postgres/pghoard.json"
+dest = "/etc/pghoard/pghoard.json"
 keys = [
   "/self/stack/environment_name",
   "/self/stack/name",

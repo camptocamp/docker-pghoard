@@ -4,38 +4,49 @@ set -e
 
 # Check if current user is registered in nss DB
 if ! getent passwd "$(id -u)" &> /dev/null && [ -e /usr/lib/libnss_wrapper.so ]; then
-			export LD_PRELOAD='/usr/lib/libnss_wrapper.so'
-			export NSS_WRAPPER_PASSWD="$(mktemp)"
-			export NSS_WRAPPER_GROUP="$(mktemp)"
-			echo "postgres:x:$(id -u):$(id -g):PostgreSQL:/home/postgres:/bin/bash" > "$NSS_WRAPPER_PASSWD"
-			echo "postgres:x:$(id -g):" > "$NSS_WRAPPER_GROUP"
+  export LD_PRELOAD='/usr/lib/libnss_wrapper.so'
+  export NSS_WRAPPER_PASSWD="$(mktemp)"
+  export NSS_WRAPPER_GROUP="$(mktemp)"
+  echo "postgres:x:$(id -u):$(id -g):PostgreSQL:/home/postgres:/bin/bash" > "$NSS_WRAPPER_PASSWD"
+  echo "postgres:x:$(id -g):" > "$NSS_WRAPPER_GROUP"
+  RANDOM_USER=true
+else
+  echo "Create pghoard directories..."
+  chown -R postgres /home/postgres
+  chown -R postgres /var/lib/pghoard
+  RANDOM_USER=false
 fi
 
-echo "Create pghoard directories..."
-chown -R postgres /home/postgres
-chown -R postgres /var/lib/pghoard
-
-if [ ! -f /home/postgres/pghoard.json ]; then
-	echo "Create pghoard configuration with confd ..."
-	if getent hosts rancher-metadata; then
-		confd -onetime -backend rancher -prefix /2015-12-19
-	else
-		confd -onetime -backend env
-	fi
+if [ ! -f /etc/pghoard/pghoard.json ]; then
+  echo "Create pghoard configuration with confd ..."
+  if getent hosts rancher-metadata; then
+    confd -onetime -backend rancher -prefix /2015-12-19
+  else
+    confd -onetime -backend env
+  fi
 else
-	echo "Configuration already present"
+  echo "Configuration already present"
 fi
 
 echo "Dump configuration..."
-cat /home/postgres/pghoard.json
+cat /etc/pghoard/pghoard.json | grep -v 'password'
 
-echo "Create physical_replication_slot on master ..."
-export PGPASSWORD=$PG_PASSWORD
-until psql -qAt -U $PG_USER -h $PG_HOST -p $PG_PORT -d postgres -c "select user;"; do
-echo "sleep 1s and try again ..."
-sleep 1
+# extract configuration to check replication slots
+for config in $(jq -Mrc '.backup_sites | reduce .[].nodes[0] as $node ([]; . + [$node])' /etc/pghoard/pghoard.json | jq -cr '.[]'); do
+  PG_HOST=$(echo $config | jq -r '.host')
+  PG_USER=$(echo $config | jq -r '.user')
+  PG_PORT=$(echo $config | jq -r '.port')
+  PGPASSWORD=$(echo $config | jq -r '.password')
+  until psql -qAt -U $PG_USER -h $PG_HOST -p $PG_PORT -d postgres -c "select user;"; do
+    echo "sleep 1s and try again ..."
+    sleep 1
+  done
+  psql -h $PG_HOST -p $PG_PORT -c "WITH foo AS (SELECT COUNT(*) AS count FROM pg_replication_slots WHERE slot_name='${REPLICATION_SLOT_NAME}') SELECT pg_create_physical_replication_slot('${REPLICATION_SLOT_NAME}') FROM foo WHERE count=0;" -U $PG_USER -d postgres
 done
-psql -h $PG_HOST -p $PG_PORT -c "WITH foo AS (SELECT COUNT(*) AS count FROM pg_replication_slots WHERE slot_name='${REPLICATION_SLOT_NAME}') SELECT pg_create_physical_replication_slot('${REPLICATION_SLOT_NAME}') FROM foo WHERE count=0;" -U $PG_USER -d postgres
 
 echo "Run the pghoard daemon ..."
-exec gosu postgres pghoard --short-log --config /home/postgres/pghoard.json
+if [ $RANDOM_USER == "true"]; then
+  exec pghoard --short-log --config /etc/pghoard/pghoard.json
+else
+  exec gosu postgres pghoard --short-log --config /etc/pghoard/pghoard.json
+fi

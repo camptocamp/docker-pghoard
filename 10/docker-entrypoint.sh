@@ -33,10 +33,10 @@ cat /etc/pghoard/pghoard.json | grep -v 'password'
 
 # extract configuration to check replication slots
 for config in $(jq -Mrc '.backup_sites | reduce .[].nodes[0] as $node ([]; . + [$node])' /etc/pghoard/pghoard.json | jq -cr '.[]'); do
-  PGHOST=$(echo $config | jq -r '.host')
-  PGUSER=$(echo $config | jq -r '.user')
-  PGPORT=$(echo $config | jq -r '.port')
-  PGPASSWORD=$(echo $config | jq -r '.password')
+  export PGHOST=$(echo $config | jq -r '.host')
+  export PGUSER=$(echo $config | jq -r '.user')
+  export PGPORT=$(echo $config | jq -r '.port')
+  export PGPASSWORD=$(echo $config | jq -r '.password')
   until psql -qAt -c "select user;" postgres; do
     echo "sleep 1s and try again ..."
     sleep 1

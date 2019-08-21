@@ -33,6 +33,9 @@ cat /etc/pghoard/pghoard.json | grep -v 'password'
 
 # extract configuration to check replication slots
 for config in $(jq -Mrc '.backup_sites | reduce .[].nodes[0] as $node ([]; . + [$node])' /etc/pghoard/pghoard.json | jq -cr '.[]'); do
+  if [ $config = 'null' ]; then
+    continue
+  fi
   export PGHOST=$(echo $config | jq -r '.host')
   export PGUSER=$(echo $config | jq -r '.user')
   export PGPORT=$(echo $config | jq -r '.port')

@@ -70,7 +70,7 @@ RUN mkdir -p /home/postgres/restore && \
 COPY conf.d /etc/confd/conf.d
 COPY templates /etc/confd/templates
 
-COPY /docker-entrypoint.sh /
+COPY /*.sh /
 WORKDIR /home/postgres
 
 VOLUME [ "/home/postgres/pghoard", "/var/lib/pghoard" ]

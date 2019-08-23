@@ -43,11 +43,11 @@ for config in $(jq -Mrc '.backup_sites | reduce .[].nodes[0] as $node ([]; . + [
   export PGUSER=$(echo $config | jq -r '.user')
   export PGPORT=$(echo $config | jq -r '.port')
   export PGPASSWORD=$(echo $config | jq -r '.password')
-  until psql -qAt -c "select user;" replication; do
+  until psql -qAt -c "select user;" postgres; do
     echo "sleep 1s and try again ..."
     sleep 1
   done
-  psql -c "WITH foo AS (SELECT COUNT(*) AS count FROM pg_replication_slots WHERE slot_name='${REPLICATION_SLOT_NAME}') SELECT pg_create_physical_replication_slot('${REPLICATION_SLOT_NAME}') FROM foo WHERE count=0;" replication
+  psql -c "WITH foo AS (SELECT COUNT(*) AS count FROM pg_replication_slots WHERE slot_name='${REPLICATION_SLOT_NAME}') SELECT pg_create_physical_replication_slot('${REPLICATION_SLOT_NAME}') FROM foo WHERE count=0;" postgres
   unset PGHOST
   unset PGUSER
   unset PGPORT

@@ -2,6 +2,9 @@
 
 set -e
 
+# add a way to override location of pghoard config
+PGHOARD_CONFIG="${PGHOARD_CONFIG:-/etc/pghoard/pghoard.json}"
+
 # Check if current user is registered in nss DB
 if ! getent passwd "$(id -u)" &> /dev/null && [ -e /usr/lib/libnss_wrapper.so ]; then
   export LD_PRELOAD='/usr/lib/libnss_wrapper.so'
@@ -17,7 +20,7 @@ else
   RANDOM_USER=false
 fi
 
-if [ ! -f /etc/pghoard/pghoard.json ]; then
+if [ ! -f $PGHOARD_CONFIG ]; then
   echo "Create pghoard configuration with confd ..."
   if getent hosts rancher-metadata; then
     confd -onetime -backend rancher -prefix /2015-12-19
@@ -29,10 +32,10 @@ else
 fi
 
 echo "Dump configuration... (password removed)"
-cat /etc/pghoard/pghoard.json | grep -v 'password'
+cat $PGHOARD_CONFIG | grep -v 'password'
 
 # extract configuration to check replication slots
-for config in $(jq -Mrc '.backup_sites | reduce .[].nodes[0] as $node ([]; . + [$node])' /etc/pghoard/pghoard.json | jq -cr '.[]'); do
+for config in $(jq -Mrc '.backup_sites | reduce .[].nodes[0] as $node ([]; . + [$node])' $PGHOARD_CONFIG | jq -cr '.[]'); do
   if [ $config = 'null' ]; then
     continue
   fi
@@ -53,7 +56,7 @@ done
 
 echo "Run the pghoard daemon ... random user: $RANDOM_USER"
 if [ $RANDOM_USER = "true" ]; then
-  exec pghoard --short-log --config /etc/pghoard/pghoard.json
+  exec pghoard --short-log --config $PGHOARD_CONFIG
 else
-  exec gosu postgres pghoard --short-log --config /etc/pghoard/pghoard.json
+  exec gosu postgres pghoard --short-log --config $PGHOARD_CONFIG
 fi

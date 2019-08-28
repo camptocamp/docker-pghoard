@@ -90,6 +90,11 @@ grep -v data_directory $RESTORE_LOCATION/postgresql.conf > /tmp/postgresql.conf
 echo "data_directory = '$RESTORE_LOCATION'" >> /tmp/postgresql.conf
 mv /tmp/postgresql.conf $RESTORE_LOCATION/postgresql.conf
 
+# Fix pg_hba.conf
+echo "host all all all md5" > $RESTORE_LOCATION/pg_hba.conf
+echo "hostssl all all all md5" >> $RESTORE_LOCATION/pg_hba.conf
+echo "local all all ident" >> $RESTORE_LOCATION/pg_hba.conf
+
 # Create a restore folder in data directory for pghoard
 mv /home/postgres/restore $RESTORE_LOCATION
 mkdir -p $RESTORE_LOCATION/restore/pg_wal/

@@ -13,11 +13,13 @@
          "nodes":[
             {
                {{if getenv "PG_HOST"}}
+               {{if getenv "REPLICATION_SLOT_NAME"}}
+               "slot": "{{getenv "REPLICATION_SLOT_NAME"}}",
+               {{end}}
                "host":"{{getenv "PG_HOST"}}",
                "port":"{{getenv "PG_PORT"}}",
                "password":"{{getenv "PG_PASSWORD"}}",
-               "user":"{{getenv "PG_USER"}}",
-               "slot": "{{getenv "REPLICATION_SLOT_NAME"}}"
+               "user":"{{getenv "PG_USER"}}"
                {{end}}
             }
          ],

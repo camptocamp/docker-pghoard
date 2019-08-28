@@ -39,6 +39,12 @@ for config in $(jq -Mrc '.backup_sites | reduce .[].nodes[0] as $node ([]; . + [
   if [ $config = 'null' ]; then
     continue
   fi
+  # don't try to create slot if configuration does not mention it
+  for node_replication_slot in $(echo $config | jq -Mrc '.nodes[].slot'); do
+    if  $node_replication_slot = 'null' ]; then
+      continue 2
+    fi
+  done
   export PGHOST=$(echo $config | jq -r '.host')
   export PGUSER=$(echo $config | jq -r '.user')
   export PGPORT=$(echo $config | jq -r '.port')

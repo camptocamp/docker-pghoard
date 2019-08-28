@@ -75,4 +75,5 @@ WORKDIR /home/postgres
 
 VOLUME [ "/home/postgres/pghoard", "/var/lib/pghoard" ]
 
+EXPOSE 16000
 ENTRYPOINT ["/docker-entrypoint.sh"]

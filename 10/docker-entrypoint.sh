@@ -20,19 +20,8 @@ else
   RANDOM_USER=false
 fi
 
-if [ ! -f $PGHOARD_CONFIG ]; then
-  echo "Create pghoard configuration with confd ..."
-  if getent hosts rancher-metadata; then
-    confd -onetime -backend rancher -prefix /2015-12-19
-  else
-    confd -onetime -backend env
-  fi
-else
-  echo "Configuration already present"
-fi
-
-echo "Dump configuration... (password removed)"
-cat $PGHOARD_CONFIG | grep -v 'password'
+# Generate pghoard config based on vars env if config is not already present
+/generate_config.sh
 
 # extract configuration to check replication slots
 for config in $(jq -Mrc '.backup_sites | reduce .[].nodes[0] as $node ([]; . + [$node])' $PGHOARD_CONFIG | jq -cr '.[]'); do

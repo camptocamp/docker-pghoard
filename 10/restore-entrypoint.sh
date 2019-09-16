@@ -14,12 +14,16 @@ TARGET=$3
 TARGET_INCLUDE=$4
 TARGET_ACTION=$5
 RESTORE_LOCATION=$6
-PGHOARD_CONFIG=/etc/pghoard/pghoard.json
+export PGHOARD_CONFIG="${PGHOARD_CONFIG:-/etc/pghoard/pghoard.json}"
 
 if [ $# -ne 6 ]; then
   echo "Usage $0 <site> <target type> <target> <target include> <end of restore action> <restore location>"
   exit 1
 fi
+
+# Generate pghoard config based on vars env if config is not already present
+echo "$0: Generate configuration if needed"
+/generate_config.sh
 
 # Check pghoard.json
 if [ ! -r $PGHOARD_CONFIG ]; then

@@ -3,6 +3,8 @@
    "backup_sites":{
    {{if exists "/self/stack/environment_name"}}
       "{{getv "/self/stack/environment_name"}}_{{getv "/self/stack/name"}}":{
+   {{else if getenv "BACKUP_SITE_NAME"}}
+      "{{getenv "BACKUP_SITE_NAME"}}":{
    {{else}}
       "{{getenv "HOSTNAME"}}":{
    {{end}}

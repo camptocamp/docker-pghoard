@@ -32,10 +32,14 @@ if [ ! -r $PGHOARD_CONFIG ]; then
 fi
 
 # Check site in pghoard config
+echo -n "$0: Check that backup site: '$SITE' is present in configuration..."
 jq -e ".backup_sites[\"$SITE\"]" $PGHOARD_CONFIG > /dev/null
 if [ $? -ne 0 ]; then
+  echo ""
   echo Invalid site : $SITE not found in $PGHOARD_CONFIG
   exit 3
+else
+  echo "OK"
 fi
 
 # Check target type
@@ -81,34 +85,54 @@ esac
 RECOVERY_ACTION="--recovery-target-action $TARGET_ACTION"
 
 # Search and download a basebackup
+echo "$0: Restore selected basebackup..."
 pghoard_restore get-basebackup --config $PGHOARD_CONFIG --target-dir $RESTORE_LOCATION --restore-to-master --site $SITE -v $RECOVERY_TARGET $RECOVERY_ACTION
+if [ $? -ne 0 ]; then
+  echo "Error during basebackup restore"
+  sleep 3600
+  exit 1
+fi
+echo "$0: Restore selected basebackup...OK"
 
 # Fix recovery.conf
+echo -n "$0: Fix recovery.conf..."
 sed -i 's/--port 16000/--port 16000 --host pghoard/' $RESTORE_LOCATION/recovery.conf
 echo "recovery_end_command = 'touch /tmp/recovery_end'" >> $RESTORE_LOCATION/recovery.conf
 echo $RECOVERY_INCLUDE >> $RESTORE_LOCATION/recovery.conf
+echo "OK"
 
 # Fix postgresql.conf
 # The location of data might have change, we need to fix this
+echo -n "$0: Fix postgresql.conf..."
 grep -v data_directory $RESTORE_LOCATION/postgresql.conf > /tmp/postgresql.conf
 echo "data_directory = '$RESTORE_LOCATION'" >> /tmp/postgresql.conf
 mv /tmp/postgresql.conf $RESTORE_LOCATION/postgresql.conf
+echo "OK"
 
 # Fix pg_hba.conf
+echo -n "$0: Fix ph_hba.conf..."
 echo "host all all all md5" > $RESTORE_LOCATION/pg_hba.conf
 echo "hostssl all all all md5" >> $RESTORE_LOCATION/pg_hba.conf
 echo "local all all ident" >> $RESTORE_LOCATION/pg_hba.conf
+echo "OK"
 
 # Create a restore folder in data directory for pghoard
-mv /home/postgres/restore $RESTORE_LOCATION
-mkdir -p $RESTORE_LOCATION/restore/pg_wal/
-#chown -R postgres /var/lib/pgsql/10/data/restore/
-ln -s $RESTORE_LOCATION/restore /home/postgres/restore
+if [ -d /home/postgres/restore ]; then
+  mv /home/postgres/restore $RESTORE_LOCATION
+  mkdir -p $RESTORE_LOCATION/restore/pg_wal/
+  #chown -R postgres /var/lib/pgsql/10/data/restore/
+  ln -s $RESTORE_LOCATION/restore /home/postgres/restore
+fi
 
 # Disable backup sites in pghoard configuration so pghoard does not try to create new backups
+echo -n "$0: Disableable backup sites..."
 jq '.backup_sites[].active = false' $PGHOARD_CONFIG > /tmp/pghoard_restore.json
+export PGHOARD_CONFIG=/tmp/pghoard_restore.json
+echo "OK"
 
 # Add a flag to indicates that postgres can start
 touch $RESTORE_LOCATION/restored
-export PGHOARD_CONFIG=/tmp/pghoard_restore.json
+
+# Run pghoard
+echo "$0: Run pghoard to serve WAL"
 exec /docker-entrypoint.sh

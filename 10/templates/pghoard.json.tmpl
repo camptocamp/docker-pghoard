@@ -51,7 +51,10 @@
             "port": {{getenv "AWS_PORT"}},
             {{end}}
             {{if getenv "AWS_IS_SECURE"}}
-            "is_secure": "{{getenv "AWS_IS_SECURE"}}",
+            "is_secure": {{getenv "AWS_IS_SECURE"}},
+            {{end}}
+            {{if getenv "AWS_IS_VERIFY_TLS"}}
+            "is_verify_tls": {{getenv "AWS_IS_VERIFY_TLS"}},
             {{end}}
             "bucket_name":"{{getenv "AWS_BUCKETNAME"}}"
          {{else if eq $storage_type "swift"}}

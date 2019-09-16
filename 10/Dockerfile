@@ -52,7 +52,8 @@ RUN curl -L -o /usr/local/bin/wait-for-it.sh https://raw.githubusercontent.com/v
 RUN mkdir -p /home/postgres/restore && \
   echo $PG_MAJOR > /home/postgres/restore/PG_VERSION && \
   chgrp -R 0 /home/postgres && \
-  chmod -R g=u /home/postgres
+  chmod -R g=u /home/postgres && \
+  mkdir /etc/pghoard
 
 COPY conf.d /etc/confd/conf.d
 COPY templates /etc/confd/templates

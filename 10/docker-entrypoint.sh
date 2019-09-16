@@ -3,7 +3,7 @@
 set -e
 
 # add a way to override location of pghoard config
-PGHOARD_CONFIG="${PGHOARD_CONFIG:-/etc/pghoard/pghoard.json}"
+export PGHOARD_CONFIG="${PGHOARD_CONFIG:-/etc/pghoard/pghoard.json}"
 
 # Check if current user is registered in nss DB
 if ! getent passwd "$(id -u)" &> /dev/null && [ -e /usr/lib/libnss_wrapper.so ]; then

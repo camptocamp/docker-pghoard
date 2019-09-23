@@ -23,5 +23,5 @@ for key in $KEY_TO_REMOVE; do
     RAW_CONFIG=$RAW_CONFIG_TMP
   fi
 done
-echo $RAW_CONFIG | jq
+echo $RAW_CONFIG | jq '.'
 exit 0

@@ -107,6 +107,13 @@ echo -n "$0: Fix postgresql.conf..."
 grep -v data_directory $RESTORE_LOCATION/postgresql.conf > /tmp/postgresql.conf
 echo "data_directory = '$RESTORE_LOCATION'" >> /tmp/postgresql.conf
 mv /tmp/postgresql.conf $RESTORE_LOCATION/postgresql.conf
+# Fix logging configuration
+grep -v log_destination $RESTORE_LOCATION/postgresql.conf > /tmp/postgresql.conf
+mv /tmp/postgresql.conf $RESTORE_LOCATION/postgresql.conf
+grep -v logging_collector $RESTORE_LOCATION/postgresql.conf > /tmp/postgresql.conf
+echo "logging_collector = off" >> /tmp/postgresql.conf
+mv /tmp/postgresql.conf $RESTORE_LOCATION/postgresql.conf
+
 echo "OK"
 
 # Fix pg_hba.conf

@@ -133,7 +133,7 @@ fi
 
 # Disable backup sites in pghoard configuration so pghoard does not try to create new backups
 echo -n "$0: Disableable backup sites..."
-jq '.backup_sites[].active = false' $PGHOARD_CONFIG > /tmp/pghoard_restore.json
+jq 'del(.pushgateway) | .backup_sites[].active = false' $PGHOARD_CONFIG > /tmp/pghoard_restore.json
 export PGHOARD_CONFIG=/tmp/pghoard_restore.json
 echo "OK"
 

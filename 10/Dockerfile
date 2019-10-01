@@ -31,6 +31,7 @@ RUN apt-get update \
      python3-dev \
      libpq-dev \
      jq \
+     locales-all \
   && curl -sSL https://bootstrap.pypa.io/get-pip.py | python3 \
   && pip3 install \
      git+https://github.com/camptocamp/pghoard.git@${PGHOARD_VERSION} \

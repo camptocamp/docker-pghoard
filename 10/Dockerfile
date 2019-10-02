@@ -5,12 +5,14 @@ MAINTAINER Camptocamp <docker@camptocamp.com>
 ENV DEBIAN_FRONTEND=noninteractive \
   HOME=/home/postgres \
   CONFD_VERSION=0.14.0 \
-  PGHOARD_VERSION=3ddf6c0 \
+  PGHOARD_VERSION=8e2782b \
   PGHOARD_BASEBACKUP_COUNT=1 \
   PGHOARD_BASEBACKUP_INTERVAL_HOURS=24 \
   PGHOARD_LOG_LEVEL=INFO \
   PGHOARD_STATSD_PORT=8125 \
   PGHOARD_STATSD_FORMAT=telegraf \
+  WAITFORIT_VERSION=54d1f0bfeb6557adf8a3204455389d0901652242
+  WAITFORIT_SHA=395408a3dc9c3db2b5c200b8722a13a60898c861633b99e6e250186adffd1370
   PG_PORT=5432 \
   REPLICATION_SLOT_NAME=pghoard
 
@@ -46,8 +48,8 @@ RUN curl -L -o /usr/local/bin/confd https://github.com/kelseyhightower/confd/rel
   && chmod +x /usr/local/bin/confd
 
 # Install wait-for-it (restoration)
-RUN curl -L -o /usr/local/bin/wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh \
-  && chmod +x /usr/local/bin/wait-for-it.sh
+RUN curl -L -o /usr/local/bin/wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/${WAITFORIT_VERSION}/wait-for-it.sh \
+  && chmod +x /usr/local/bin/wait-for-it.sh && [ $(sha256sum /usr/local/bin/wait-for-it.sh | cut -f1 -d' ') = ${WAITFORIT_SHA} ]
 
 # pghoard 1.6.0 check for the existence of PG_VERSION in pg_data_directory...
 RUN mkdir -p /home/postgres/restore && \

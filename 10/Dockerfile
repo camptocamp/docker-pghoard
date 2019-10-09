@@ -61,7 +61,6 @@ RUN mkdir -p /home/postgres/restore && \
 COPY conf.d /etc/confd/conf.d
 COPY templates /etc/confd/templates
 
-RUN umask 002
 COPY /*.sh /
 WORKDIR /home/postgres
 

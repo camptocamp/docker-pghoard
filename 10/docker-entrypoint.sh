@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+umask 002
 
 # add a way to override location of pghoard config
 export PGHOARD_CONFIG="${PGHOARD_CONFIG:-/etc/pghoard/pghoard.json}"

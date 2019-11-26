@@ -113,3 +113,17 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 -----END PRIVATE KEY-----
 ```
+
+# Build and push Docker images
+
+You can use `make.sh` to build:
+
+```bash
+./make.sh
+```
+
+and optionnaly upload your images:
+
+```bash
+./make.sh myhubid/myrepositoryname
+```

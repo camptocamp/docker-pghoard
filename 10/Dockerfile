@@ -1,4 +1,5 @@
-FROM postgres:10
+ARG BASE_TAG
+FROM camptocamp/postgres:${BASE_TAG}
 MAINTAINER Camptocamp <docker@camptocamp.com>
 
 # pghoard release 2.1.0: 9c682141bdc2fd98d6fbd60c4ff7cd0811536d53
